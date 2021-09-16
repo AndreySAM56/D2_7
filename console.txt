@@ -1,0 +1,182 @@
+V:\Python\MyWorks\News>django-admin startproject news
+
+V:\Python\MyWorks\News>cd news
+
+V:\Python\MyWorks\News\news>manage.py startapp newapp
+
+V:\Python\MyWorks\News\news>manage.py makemigration
+Unknown command: 'makemigration'. Did you mean makemigrations?
+Type 'manage.py help' for usage.
+
+V:\Python\MyWorks\News\news>manage.py makemigrations
+Migrations for 'newapp':
+  newapp\migrations\0001_initial.py
+    - Create model Author
+    - Create model Category
+    - Create model Post
+    - Create model PostCategory
+    - Add field postCategory to post
+    - Create model Comment
+
+V:\Python\MyWorks\News\news>manage.py mirate
+Unknown command: 'mirate'. Did you mean migrate?
+Type 'manage.py help' for usage.
+
+V:\Python\MyWorks\News\news>manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, auth, contenttypes, newapp, sessions
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying auth.0001_initial... OK
+  Applying admin.0001_initial... OK
+  Applying admin.0002_logentry_remove_auto_add... OK
+  Applying admin.0003_logentry_add_action_flag_choices... OK
+  Applying contenttypes.0002_remove_content_type_name... OK
+  Applying auth.0002_alter_permission_name_max_length... OK
+  Applying auth.0003_alter_user_email_max_length... OK
+  Applying auth.0004_alter_user_username_opts... OK
+  Applying auth.0005_alter_user_last_login_null... OK
+  Applying auth.0006_require_contenttypes_0002... OK
+  Applying auth.0007_alter_validators_add_error_messages... OK
+  Applying auth.0008_alter_user_username_max_length... OK
+  Applying auth.0009_alter_user_last_name_max_length... OK
+  Applying auth.0010_alter_group_name_max_length... OK
+  Applying auth.0011_update_proxy_permissions... OK
+  Applying auth.0012_alter_user_first_name_max_length... OK
+  Applying newapp.0001_initial... OK
+  Applying sessions.0001_initial... OK
+
+V:\Python\MyWorks\News\news>manage.py shell
+Python 3.8.5 (tags/v3.8.5:580fbb0, Jul 20 2020, 15:43:08) [MSC v.1926 32 bit (Intel)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+(InteractiveConsole)
+>>> from newapp.models import *
+>>> user1 = User.objects.create(username='Andrey', first_name='First')
+>>> Author.objects.create(authorUser=user1)
+<Author: Author object (1)>
+>>> user2 = User.objects.create(username='Sasha', first_name='Second')
+>>> Author.objects.create(authorUser=user2)
+<Author: Author object (2)>
+>>> Category.objects.create(name='IT')
+<Category: Category object (1)>
+>>> Category.objects.create(name='Auto')
+<Category: Category object (2)>
+>>> Category.objects.create(name='Many')
+<Category: Category object (3)>
+>>> Category.objects.create(name='Sport')
+<Category: Category object (4)>
+>>> Post.objects.create(author=Author.objects.get(authorUser=User.objects.get(username='Andrey')), categoryType='AR', title='Заголовок статьи про что-то', text='Статья про что-то, очень интересная')
+<Post: Post object (1)>
+>>> Post.objects.create(author=Author.objects.get(authorUser=User.objects.get(username='Andrey')), categoryType='NW', title='Заголовок новости. но про другое', text='Новость про новости, от того же автора')
+<Post: Post object (2)>
+>>> Post.objects.create(author=Author.objects.get(authorUser=User.objects.get(username='Sasha')), categoryType='AR', title='Заголовок статьи от Санька', text='Тут Саша пишет очень интересную статью')
+<Post: Post object (3)>
+>>> p1 = Post.objects.get(pk1)
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+NameError: name 'pk1' is not defined
+>>> p1 = Post.objects.get(pk=1)
+>>> p2 = Post.objects.get(categoryType='NW')
+>>> p3 = Post.objects.get(pk=3)
+>>> c1 = Category.objects.get(pk=1)
+>>> c2 = Category.objects.get(pk=2)
+>>> c3 = Category.objects.get(name='Sport')
+>>> c4 = Category.objects.get(name='Many')
+>>> p1.postCategory.add(c2, c4)
+>>> p1.postCategory.add(c1, c2)
+>>> p2.postCategory.add(c3, c4)
+>>> p3.postCategory.add(c2, c4, c3)
+>>> Comment.objects.create(commentUser=User.objects.get(username='Andrey'), commentPost=Post.objects.get(pk=1), text='Отлично')
+<Comment: Andrey>
+>>> Comment.objects.create(commentUser=User.objects.get(username='Andrey'), commentPost=Post.objects.get(pk=2), text='Удовлетворительно')
+<Comment: Andrey>
+>>> Comment.objects.create(commentUser=User.objects.get(username='Andrey'), commentPost=Post.objects.get(pk=3), text='Хорошо')
+<Comment: Andrey>
+>>> Comment.objects.create(commentUser=User.objects.get(username='Sasha'), commentPost=Post.objects.get(pk=3), text='Отлично')
+<Comment: Sasha>
+>>> Comment.objects.create(commentUser=User.objects.get(username='Sasha'), commentPost=Post.objects.get(pk=1), text='Хорошо')
+<Comment: Sasha>
+>>> Post.objects.get(pk=1).like()
+>>> Post.objects.get(pk=1).like()
+>>> Post.objects.get(pk=1).like()
+>>> Post.objects.get(pk=1).like()
+>>> Post.objects.get(pk=1).like()
+>>> Post.objects.get(pk=2).like()
+>>> Post.objects.get(pk=2).like()
+>>> Post.objects.get(pk=2).like()
+>>> Post.objects.get(pk=2).like()
+>>> Post.objects.get(pk=2).like()
+>>> Post.objects.get(pk=2).like()
+>>> Post.objects.get(pk=2).like()
+>>> Post.objects.get(pk=2).like()
+>>> Post.objects.get(pk=2).dislike()
+>>> Post.objects.get(pk=3).like()
+>>> Post.objects.get(pk=3).like()
+>>> Comment.objects.get(pk=3).like()
+>>> Comment.objects.get(pk=2
+...
+... Comment.objects.get(pk=2).like()
+  File "<console>", line 3
+    Comment.objects.get(pk=2).like()
+    ^
+SyntaxError: invalid syntax
+>>> Comment.objects.get(pk=2).like()
+>>> Comment.objects.get(pk=2).like()
+>>> Comment.objects.get(pk=5).like()
+>>> Comment.objects.get(pk='1').like()
+>>> Comment.objects.get(pk='1').like()
+>>> Comment.objects.get(pk='4').like()
+>>> Comment.objects.get(pk='4').like()
+>>> Comment.objects.get(pk='4').like()
+>>> Author.objects.get(authorUser=User.objects.get(username='Andrey')).apdate_rating()
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+AttributeError: 'Author' object has no attribute 'apdate_rating'
+>>> Author.objects.get(authorUser=User.objects.get(username='Andrey')).update_rating()
+>>> Author.objects.get(authorUser=User.objects.get(username='Sasha')).update_rating())
+  File "<console>", line 1
+    Author.objects.get(authorUser=User.objects.get(username='Sasha')).update_rating())
+                                                                                     ^
+SyntaxError: unmatched ')'
+>>> Author.objects.get(authorUser=User.objects.get(username='Sasha')).update_rating()
+>>> a = Author.objects.get(authorUser=User.objects.get(username='Andrey'))
+>>> a.ratingAuthor
+41
+>>> s =Author.objects.get(authorUser=User.objects.get(username='Sasha'))
+>>> s.ratingAuthor
+10
+>>> best=Author.objects.all().order_by('-ratingAuthor').values('authorUser','ratingAuthor')[0]
+>>> print(best)
+{'authorUser': 1, 'ratingAuthor': 41}
+>>> best=Author.objects.all().order_by('-ratingAuthor')[0]
+>>> print(best)
+Author object (1)
+>>> best.authorUser.username
+'Andrey'
+>>> best.ratingAuthor
+41
+>>> best = Post.objects.all().order_by('-rating')[0]
+>>> print(best)
+Post object (2)
+>>> best.dataCreation
+datetime.datetime(2021, 9, 16, 19, 6, 56, 910393, tzinfo=<UTC>)
+>>> best.author
+<Author: Author object (1)>
+>>> best.author.authorUser.username
+'Andrey'
+>>> best.rating
+7
+>>> best.title
+'Заголовок новости. но про другое'
+>>> best.preview()
+'Новость про новости, от того же автора...'
+>>> comm = Comment.objects.filter(commentPost = best)
+>>> print(comm)
+<QuerySet [<Comment: Andrey>, <Comment: Sasha>, <Comment: Sasha>]>
+>>> comm.values('commentUser','text')
+<QuerySet [{'commentUser': 1, 'text': 'Удовлетворительно'}, {'commentUser': 2, 'text': 'Отлично'}, {'commentUser': 2, 'text': 'Очень Отлично'}]>
+>>> comm.values('dataCreation','commentUser','rating','text')
+<QuerySet [{'dataCreation': datetime.datetime(2021, 9, 16, 19, 20, 25, 241722, tzinfo=<UTC>), 'commentUser': 1, 'rating': 2, 'text': 'Удовлетворительно'}, {'dataCreation': datetime.datetime(2021, 9, 16, 21, 17, 47, 103596, tzinfo=<UTC
+>), 'commentUser': 2, 'rating': 0, 'text': 'Отлично'}, {'dataCreation': datetime.datetime(2021, 9, 16, 21, 18, 19, 114861, tzinfo=<UTC>), 'commentUser': 2, 'rating': 0, 'text': 'Очень Отлично'}]>
+
+
